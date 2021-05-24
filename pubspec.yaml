@@ -16,6 +16,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+fonts:
+  - family: Inconsolata
+    fonts:
+      - asset: Inconsolata-Medium.ttf
+
 flutter:
   uses-material-design: true
 

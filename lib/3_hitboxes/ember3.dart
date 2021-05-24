@@ -5,7 +5,6 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
 class Ember3 extends Ember with Hitbox, Collidable {
-
   Ember3(Vector2 position, double direction) : super(position, direction);
 
   @override

@@ -1,6 +1,6 @@
 # ember_vs_ice
 
-A showcasing of simple collision detection in Flame
+A showcase of simple collision detection in Flame
 
 ## Getting Started
 

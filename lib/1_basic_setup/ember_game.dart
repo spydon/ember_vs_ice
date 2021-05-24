@@ -24,7 +24,7 @@ class EmberGame extends BaseGame with HasDraggableComponents {
   void update(double dt) {
     super.update(dt);
     _spawnTime -= dt;
-    if(_spawnTime <= 0) {
+    if (_spawnTime <= 0) {
       add(createEnemy());
       _spawnTime = spawnRate;
     }

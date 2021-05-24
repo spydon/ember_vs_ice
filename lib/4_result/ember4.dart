@@ -3,16 +3,18 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/widgets.dart';
 
-class Ember extends SpriteAnimationComponent with HasGameRef {
+class Ember4 extends SpriteAnimationComponent
+    with HasGameRef, Hitbox, Collidable {
   @override
   int get priority => 0;
   final Vector2 gameSize = Vector2.zero();
   final Random rng = Random();
   double direction;
 
-  Ember(Vector2 position, this.direction) : super(position: position);
+  Ember4(Vector2 position, this.direction) : super(position: position);
 
   @override
   Future<void> onLoad() async {
@@ -34,6 +36,8 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
       curve: Curves.bounceIn,
       onComplete: remove,
     ));
+    addShape(HitboxCircle());
+    collidableType = CollidableType.passive;
   }
 
   @override
@@ -41,4 +45,7 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
     super.onGameResize(gameSize);
     this.gameSize.setFrom(gameSize);
   }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
 }

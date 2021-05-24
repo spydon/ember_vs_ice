@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '1_basic_setup/ember_game.dart';
 import '2_collidable/ember_game2.dart';
 import '3_hitboxes//ember_game3.dart';
+import '4_result/ember_game4.dart';
 
 void main() async {
   final dashbook = Dashbook(
@@ -20,13 +21,18 @@ void main() async {
     )
     ..add(
       'Collidable mixin',
-          (_) => GameWidget(game: EmberGame2()),
+      (_) => GameWidget(game: EmberGame2()),
       codeLink: baseLink('2_collidable'),
     )
     ..add(
       'Add hitboxes',
-          (_) => GameWidget(game: EmberGame3()),
+      (_) => GameWidget(game: EmberGame3()),
       codeLink: baseLink('3_hitboxes'),
+    )
+    ..add(
+      'Finalized result',
+      (_) => GameWidget(game: EmberGame4()),
+      codeLink: baseLink('4_result'),
     );
   runApp(dashbook);
 }
