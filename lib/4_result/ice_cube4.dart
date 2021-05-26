@@ -24,7 +24,7 @@ class IceCube4 extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    speed = 50 + rng.nextInt(50).toDouble();
+    speed = gameRef.enemySpeed + rng.nextInt(50).toDouble();
     final textureSize = Vector2(588, 1108);
     final textureRelation = textureSize.normalized();
     size =
@@ -75,6 +75,7 @@ class IceCube4 extends SpriteAnimationComponent
     if (!gameRef.isGameOver) {
       gameRef.score++;
       gameRef.spawnRate = max(gameRef.spawnRate - 0.5, 0.5);
+      gameRef.enemySpeed = min(gameRef.enemySpeed + 10, 300);
     }
   }
 

@@ -16,6 +16,7 @@ class EmberGame4 extends BaseGame
   late final GameOver gameOverComponent;
   late PositionComponent player;
   static const _startSpawnRate = 10.0;
+  double enemySpeed = 50;
   double spawnRate = _startSpawnRate;
   double _spawnTime = 0;
   bool isGameOver = false;
