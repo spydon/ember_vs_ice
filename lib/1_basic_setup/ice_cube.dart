@@ -18,7 +18,7 @@ class IceCube extends SpriteAnimationComponent with HasGameRef<EmberGame> {
 
   @override
   Future<void> onLoad() async {
-    speed = rng.nextInt(100).toDouble();
+    speed = 50 + rng.nextInt(50).toDouble();
     final textureSize = Vector2(588, 1108);
     size = textureSize / 4;
     angle = rng.nextDouble() * 6;

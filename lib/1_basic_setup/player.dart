@@ -8,39 +8,60 @@ import 'package:flame/gestures.dart';
 import 'ember.dart';
 import 'ember_game.dart';
 
-class Player extends SpriteAnimationComponent
+enum PlayerState {
+  idle,
+  shooting,
+}
+
+class Player extends SpriteAnimationGroupComponent
     with HasGameRef<EmberGame>, Draggable {
+
+  Player() : super(animations: {});
+
   @override
   int get priority => 1;
-  final Vector2 gameSize = Vector2.zero();
-  final Random rng = Random();
   bool isDragged = false;
   final double shootingRate = 0.5;
-  double _reloadTime = 0.1;
+  double _reloadTime = 0.3;
 
   @override
   Future<void> onLoad() async {
-    final textureSize = Vector2(588, 1108);
-    size = textureSize / 4;
-    angle = pi / 2;
+    final textureRelation = Vector2(435, 640).normalized();
+    size = textureRelation * (min(gameRef.size.x, gameRef.size.y) / 4);
     anchor = Anchor.center;
     position = (gameRef.size / 2)..x = size.x * 2;
-    animation = await gameRef.loadSpriteAnimation(
-      'ice_sheet.png',
-      SpriteAnimationData.sequenced(
-        amount: 3,
-        textureSize: textureSize,
-        stepTime: 0.15,
+    final baseSpriteName = "fire_bender_X.png";
+    final sprites = await Future.wait(
+      List.generate(
+        4,
+        (i) => gameRef.loadSprite(baseSpriteName.replaceFirst("X", "${i + 1}")),
       ),
     );
+    final idleAnimation =
+        SpriteAnimation.spriteList(sprites.sublist(0, 1), stepTime: 100);
+    final shootAnimation = SpriteAnimation.spriteList(
+      sprites,
+      stepTime: _reloadTime,
+      loop: false,
+    )..onComplete = () {
+        animation!.reset();
+        current = PlayerState.idle;
+      };
+    animations = {
+      PlayerState.idle: idleAnimation,
+      PlayerState.shooting: shootAnimation,
+    };
+    current = PlayerState.idle;
   }
 
-  PositionComponent createEmber() => Ember(position + Vector2(20, 0), angle);
+  void shoot() {
+    gameRef.add(createEmber());
+    current = PlayerState.shooting;
+    _reloadTime = shootingRate;
+  }
 
-  @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    this.gameSize.setFrom(gameSize);
+  PositionComponent createEmber() {
+    return Ember(position + (Vector2(0.6, -0.12)..multiply(size)));
   }
 
   @override
@@ -50,8 +71,7 @@ class Player extends SpriteAnimationComponent
       _reloadTime -= dt;
     }
     if (_reloadTime <= 0) {
-      gameRef.add(createEmber());
-      _reloadTime = shootingRate;
+      shoot();
     }
   }
 

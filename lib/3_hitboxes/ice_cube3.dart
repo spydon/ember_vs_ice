@@ -1,4 +1,3 @@
-import 'package:ember_vs_ice/1_basic_setup/ember.dart';
 import 'package:ember_vs_ice/1_basic_setup/ice_cube.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';

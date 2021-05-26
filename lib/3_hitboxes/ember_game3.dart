@@ -8,7 +8,7 @@ import 'player3.dart';
 
 class EmberGame3 extends EmberGame with HasCollidables {
   @override
-  bool debugMode = false;
+  bool debugMode = true;
 
   @override
   PositionComponent createPlayer() => Player3();

@@ -14,8 +14,12 @@ class Player3 extends Player with Hitbox, Collidable {
   }
 
   @override
-  PositionComponent createEmber() => Ember3(position + Vector2(20, 0), angle);
+  PositionComponent createEmber() {
+    return Ember3(position + (Vector2(0.6, -0.12)..multiply(size)));
+  }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+    // Do something
+  }
 }

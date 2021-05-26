@@ -24,9 +24,12 @@ class IceCube4 extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    speed = rng.nextInt(100).toDouble();
+    speed = 50 + rng.nextInt(50).toDouble();
     final textureSize = Vector2(588, 1108);
-    size = textureSize / 4;
+    final textureRelation = textureSize.normalized();
+    size =
+        textureRelation * (25 + (gameRef.size.length / 3) * rng.nextDouble());
+    Vector2.min(size, textureRelation * 300, size);
     angle = rng.nextDouble() * 6;
     anchor = Anchor.center;
     animation = await gameRef.loadSpriteAnimation(
@@ -69,9 +72,9 @@ class IceCube4 extends SpriteAnimationComponent
   @override
   void onRemove() {
     super.onRemove();
-    if(!gameRef.isGameOver) {
+    if (!gameRef.isGameOver) {
       gameRef.score++;
-      gameRef.spawnRate = max(gameRef.spawnRate-0.5, 0.5);
+      gameRef.spawnRate = max(gameRef.spawnRate - 0.5, 0.5);
     }
   }
 
@@ -99,7 +102,7 @@ class IceCube4 extends SpriteAnimationComponent
         speed: 50,
         onComplete: () {
           isScaling = false;
-          if (size.length2 < 200) {
+          if (size.length2 < 4000) {
             remove();
             gameRef.add(Explosion(position.clone()));
           }

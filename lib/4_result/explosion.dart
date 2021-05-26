@@ -20,7 +20,7 @@ class Explosion extends SpriteAnimationComponent with HasGameRef {
   Future<void> onLoad() async {
     size = Vector2.all(1) * (350.0 + _rng.nextInt(100));
     anchor = Anchor.center;
-    final textureSize = Vector2.all(128);
+    final textureSize = Vector2.all(126);
     animation = await gameRef.loadSpriteAnimation(
       'boom.png',
       SpriteAnimationData.sequenced(

@@ -15,7 +15,7 @@ class EmberGame4 extends BaseGame
   final Random rng = Random();
   late final GameOver gameOverComponent;
   late PositionComponent player;
-  static const _startSpawnRate = 15.0;
+  static const _startSpawnRate = 10.0;
   double spawnRate = _startSpawnRate;
   double _spawnTime = 0;
   bool isGameOver = false;

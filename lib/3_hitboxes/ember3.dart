@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 
 class Ember3 extends Ember with Hitbox, Collidable {
-  Ember3(Vector2 position, double direction) : super(position, direction);
+  Ember3(Vector2 position) : super(position);
 
   @override
   Future<void> onLoad() async {
@@ -16,6 +16,6 @@ class Ember3 extends Ember with Hitbox, Collidable {
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    print('$this collided $other');
+    // Do something
   }
 }

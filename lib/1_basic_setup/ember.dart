@@ -10,9 +10,8 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
   int get priority => 0;
   final Vector2 gameSize = Vector2.zero();
   final Random rng = Random();
-  double direction;
 
-  Ember(Vector2 position, this.direction) : super(position: position);
+  Ember(Vector2 position) : super(position: position);
 
   @override
   Future<void> onLoad() async {

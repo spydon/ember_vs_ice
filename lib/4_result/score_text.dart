@@ -37,7 +37,7 @@ class Score extends TextComponent with HasGameRef<EmberGame4> {
 
   void moveDown() {
     addEffect(MoveEffect(
-      path: [gameRef.size/2 + Vector2(0, 30)],
+      path: [gameRef.size / 2 + Vector2(0, 30)],
       speed: 300,
       curve: Curves.bounceIn,
     ));

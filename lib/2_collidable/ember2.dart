@@ -6,7 +6,7 @@ import 'package:flame/geometry.dart';
 import '../1_basic_setup/ember.dart';
 
 class Ember2 extends Ember with Hitbox, Collidable {
-  Ember2(Vector2 position, double direction) : super(position, direction);
+  Ember2(Vector2 position) : super(position);
 
   @override
   Future<void> onLoad() async {

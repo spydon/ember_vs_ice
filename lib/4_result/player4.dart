@@ -10,38 +10,65 @@ import 'package:flame/gestures.dart';
 import 'ember4.dart';
 import 'ember_game4.dart';
 
-class Player4 extends SpriteAnimationComponent
+enum PlayerState {
+  idle,
+  shooting,
+}
+
+class Player4 extends SpriteAnimationGroupComponent
     with HasGameRef<EmberGame4>, Draggable, Hitbox, Collidable {
+  Player4() : super(animations: {});
+
   @override
   int get priority => 1;
   final Vector2 gameSize = Vector2.zero();
   final Random rng = Random();
   bool isDragged = false;
   final double shootingRate = 0.5;
-  double _reloadTime = 0.1;
+  double _reloadTime = 0.3;
   final Vector2 _dragOffset = Vector2.zero();
   bool isScaling = false;
   Vector2 scaleBuffer = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
-    final textureSize = Vector2(588, 1108);
-    size = textureSize / 4;
-    angle = pi / 2;
+    final textureRelation = Vector2(435, 640).normalized();
+    size = textureRelation * (min(gameRef.size.x, gameRef.size.y) / 4);
     anchor = Anchor.center;
     position = (gameRef.size / 2)..x = size.x * 2;
-    animation = await gameRef.loadSpriteAnimation(
-      'ice_sheet.png',
-      SpriteAnimationData.sequenced(
-        amount: 3,
-        textureSize: textureSize,
-        stepTime: 0.15,
+    final baseSpriteName = "fire_bender_X.png";
+    final sprites = await Future.wait(
+      List.generate(
+        4,
+        (i) => gameRef.loadSprite(baseSpriteName.replaceFirst("X", "${i + 1}")),
       ),
     );
+    final idleAnimation =
+        SpriteAnimation.spriteList(sprites.sublist(0, 1), stepTime: 100);
+    final shootAnimation = SpriteAnimation.spriteList(
+      sprites,
+      stepTime: _reloadTime,
+      loop: false,
+    )..onComplete = () {
+        animation!.reset();
+        current = PlayerState.idle;
+      };
+    animations = {
+      PlayerState.idle: idleAnimation,
+      PlayerState.shooting: shootAnimation,
+    };
+    current = PlayerState.idle;
     addShape(HitboxRectangle());
   }
 
-  PositionComponent createEmber() => Ember4(position + Vector2(20, 0), angle);
+  void shoot() {
+    final ember = Ember4(
+      position + (Vector2(0.6, -0.12)..multiply(size)),
+      angle,
+    );
+    gameRef.add(ember);
+    current = PlayerState.shooting;
+  }
 
   @override
   void onGameResize(Vector2 gameSize) {
@@ -56,7 +83,7 @@ class Player4 extends SpriteAnimationComponent
       _reloadTime -= dt;
     }
     if (_reloadTime <= 0) {
-      gameRef.add(createEmber());
+      shoot();
       _reloadTime = shootingRate;
     }
   }
@@ -65,17 +92,18 @@ class Player4 extends SpriteAnimationComponent
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     if (other is IceCube4) {
       final sizeReduction = size.normalized()..multiply(Vector2.all(10));
+      scaleBuffer.add(sizeReduction);
       if (!isScaling) {
         isScaling = true;
         final newSize = Vector2.zero();
-        Vector2.max(size - scaleBuffer - sizeReduction, newSize, newSize);
+        Vector2.max(size - scaleBuffer, newSize, newSize);
         addEffect(
           ScaleEffect(
             size: newSize,
-            speed: 30,
+            speed: 50,
             onComplete: () {
               isScaling = false;
-              if (size.isZero()) {
+              if (size.length2 < 250) {
                 gameRef.isGameOver = true;
                 remove();
               }
@@ -83,8 +111,6 @@ class Player4 extends SpriteAnimationComponent
           ),
         );
         scaleBuffer.setZero();
-      } else {
-        scaleBuffer.add(sizeReduction);
       }
     }
   }
