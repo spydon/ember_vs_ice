@@ -11,7 +11,6 @@ class IceCube3 extends IceCube with Hitbox, Collidable {
     await super.onLoad();
     final rectangle = HitboxRectangle(relation: Vector2(1.0, 0.5))
       ..relativeOffset = Vector2(0.0, -0.5);
-    addShape(rectangle);
     final circle = HitboxCircle()..relativeOffset = Vector2(0.0, 0.5);
     addShape(rectangle);
     addShape(circle);
